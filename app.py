@@ -48,6 +48,10 @@ def get_csv_columns(file_path):
 def index():
     return render_template('index.html')
 
+@app.route('/api/')
+def api_index():
+    return render_template('index.html')
+
 @app.route('/upload', methods=['POST'])
 def upload_files():
     if 'file1' not in request.files or 'file2' not in request.files:
@@ -112,6 +116,9 @@ def process_files():
 def download_file(filename):
     return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), as_attachment=True)
 
+# For Vercel deployment
+app.debug = False
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
-    app.run(debug=True, host='0.0.0.0', port=port) 
+    app.run(debug=False, host='0.0.0.0', port=port) 
