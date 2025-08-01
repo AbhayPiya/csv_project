@@ -4,7 +4,7 @@ import csv
 import tempfile
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 app.secret_key = 'your-secret-key-here'
 
 UPLOAD_FOLDER = '/tmp/uploads'
@@ -60,7 +60,14 @@ def get_csv_columns(file_path):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    try:
+        return render_template('index.html')
+    except Exception as e:
+        return f"Error loading template: {str(e)}", 500
+
+@app.route('/health')
+def health():
+    return "OK", 200
 
 @app.route('/upload', methods=['POST'])
 def upload_files():
